@@ -34,14 +34,14 @@ public class main {
 		ps.println("Ingrese el valor del segundo angulo:");
 		int a2 = Integer.parseInt(entradaDeDatosSTR());
 		int resto=180 - (a1 + a2) ;		
-		ps.printf("El resto es de: %d° \n", resto);
+		ps.printf("El resto es de: %dï¿½ \n", resto);
 	}
-	public static void Calculartemperatura() {
+	public static void Calculartemperatura(resto) {
 		PrintStream ps = new PrintStream(System.out);
 		ps.println("Ingrese el valor del primer angulo:");
 		int gf = Integer.parseInt(entradaDeDatosSTR());
 		int gc=
-		ps.printf("El resto es de: %d° \n", resto);
+		ps.printf("El resto es de: %dï¿½ \n", resto);
 	}
 	
 	
