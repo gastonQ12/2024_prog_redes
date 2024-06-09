@@ -1,168 +1,76 @@
 package guia1;
 import java.io.IOException;
+
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 public class main {
 	public static void main(String[] args) {
 		PrintStream ps = new PrintStream(System.out);
+		Primer p = new Primer();
 		boolean i=false;		
 		while (i==false) {
-			ps.println("1) Sueldo Bruto \n2) calcular angulos \n3) calcular perimetro \n4) Calcular temperatura \n5) Calcular tiempo \n6) Planes de pago \n7) Zodiaco \n0) salir");
+			ps.println("\n1) Sueldo Bruto \n2) calcular angulos \n3) calcular perimetro \n4) Calcular temperatura \n5) Calcular tiempo \n6) Planes de pago \n7) Zodiaco \n0) salir");
 			int aux=Integer.parseInt(entradaDeDatosSTR());
-			if(aux==1) {calcularSueldoBruto();}
-			if(aux==2) {sumarAngulos();}
-			if(aux==3) {calcularPerimetro();}
-			if(aux==4) {calculartemperatura();}
-			if(aux==5) {calcularTiempo();}
-			if(aux==6) {planesPago();}
-			if(aux==7) {caballerosDeZodiaco();}
+			if(aux==1) {ordenarApellidos();}
+			if(aux==2) {p.sumarAngulos();}
+			if(aux==3) {p.calcularPerimetro();}
+			if(aux==4) {p.calculartemperatura();}
+			if(aux==5) {p.calcularTiempo();}
+			if(aux==6) {p.planesPago();}
+			if(aux==7) {p.caballerosDeZodiaco();}
 			if(aux==0) {i=true;}			
 		}
+		
+		
+		
+		
 	}
+	
+	//2.A ordenar apellidos
 
-	//1.A calcular sueldo
-	public static void calcularSueldoBruto(){
+	public static void ordenarApellidos(){
 		PrintStream ps = new PrintStream(System.out);
-		ps.println("Ingrese las horas trabajadas :");
-		Float h = Float.parseFloat(entradaDeDatosSTR());
-		ps.println("Ingrese el ingreso x hora :");
-		float p = Float.parseFloat(entradaDeDatosSTR());
-		float sueldo=h*p;		
-		ps.printf("El sueldo en bruto es: %.2f $", sueldo);
-	}
-	//1.B resto de angulo
-	public static void sumarAngulos() {
-		PrintStream ps = new PrintStream(System.out);
-		ps.println("Ingrese el valor del primer angulo :");
-		int a1 = Integer.parseInt(entradaDeDatosSTR());
-		ps.println("Ingrese el valor del segundo angulo :");
-		int a2 = Integer.parseInt(entradaDeDatosSTR());
-		int resto=180 - (a1 + a2) ;		
-		ps.printf("El resto es de: %d \n", resto);
-	}
-	//1.C calcular perimetro
-	public static void calcularPerimetro() {
-		PrintStream ps = new PrintStream(System.out);
-		ps.println("Ingresar la superficie del cuadrado: ");
-		float superficie = Float.parseFloat(entradaDeDatosSTR());
-		float perimetro = superficie*4;
-		ps.printf("El perimetro del cuadrado es %.2f \n",perimetro);
-		
-		
-	}
-	//1.D calcular temperatura (32 °F − 32) × 5/9 
-	public static void calculartemperatura() {
-		PrintStream ps = new PrintStream(System.out);
-		ps.println("Ingrese la temperatura en fahrenheit: ");
-		int gc = ((Integer.parseInt(entradaDeDatosSTR())-32)*5/9);
-		ps.printf("En celsius es:%d \n", gc);
+		Reader r = new Reader();
+		String aux = "";
+		String aux2 = "";
+		List<String> apellidos = new LinkedList<String>();
+		for(int i=0;i<=2;i++) {
+			ps.println("Ingrese un apellido: ");
+			aux = r.leer();
+			apellidos.add(aux);
+		}Collections.sort(apellidos);
+		ps.println("Los apellidos se ordenan asi: ");
+		for(String apellido:apellidos) {
+			aux2 += apellido.concat(", ");}
+		ps.println(aux2.substring(0, (aux2.length() - 2)));
 	}
 	
-	//1.E calcular tiempo
-	public static void calcularTiempo() {
-		
+	//2.B sacar menor
+	
+	public static void sacarMenor() {
 		PrintStream ps = new PrintStream(System.out);
-		ps.println("Ingrese los segundos: ");
-		int seg= Integer.parseInt(entradaDeDatosSTR());
-		int minuto=0;
-		int hora=0;
-		int dia=0;
-		boolean i=false;
-		while(i==false) {
-			if(seg>=60){
-				minuto +=1;
-				seg -= 60;
-			}else {i = true;}
-			if(minuto>=60){
-				hora +=1;
-				minuto -= 60;
-			}
-			if(hora>=24){
-				dia +=1;
-				hora -= 24;
-			}
-			
+		Reader r = new Reader();
+		List<Float> numeros = new ArrayList<>();
+		ps.println("Indique un numero: ");
+		float aux = Float.parseFloat(r.leer());
+		numeros.add(aux);
 		}
-		ps.printf("Dias:%d \nHoras:%d \nMnutos:%d \nSegundos:%d \n",dia, hora, minuto, seg);
-	}
-	
-	//1.F planes de pago
-	public static void planesPago() {
-		PrintStream ps = new PrintStream(System.out);
-		ps.println("Ingrese el precio del articulo: ");
-		double precioA = Double.parseDouble(entradaDeDatosSTR());
-		
-		ps.println("que plan de pago se utiliza:");
-		int aux=Integer.parseInt(entradaDeDatosSTR());
-		ps.println("El precio final es de: ");
-		if(aux==1) {ps.println(precioA*0.90);}
-		if(aux==2) {ps.println(precioA*1.10);}
-		if(aux==3) {ps.println(precioA*1.15);}
-		if(aux==4) {ps.println(precioA*1.25);}
-		else {ps.println("opcion no disponible");}
-	}
-	
-	//1.G Zodiaco
-	public static void caballerosDeZodiaco(){
-		PrintStream ps = new PrintStream(System.out);
-		ps.println("Ingrese su signo del zodiaco: ");
-		String aux = entradaDeDatosSTR();		
-		String signo = aux.substring(0, 1).toUpperCase().concat(aux.substring(1).toLowerCase());
-		switch(signo){
-		case "Aries":
-			ps.println("Naciste entre el 21 de marzo y el 19 de abril, sos 'Mu de Aries'");
-			break;
-		case "Tauro":
-			ps.println("Naciste entre el 20 de abril al 20 de mayo, sos 'Aldebarán de Tauro'");
-			break;
-		case "Geminis":
-			ps.println("Naciste entre el 21 de mayo al 20 de junio, sos 'Saga de Géminis'");
-			break;
-		case "Cencer":
-			ps.println("Naciste entre el 21 de junio al 22 de julio, sos 'Deathmask de Cáncer'");
-			break;
-		case "Leo":
-			ps.println("Naciste entre el 23 de julio al 22 de agosto, sos 'Aioria de Leo'");
-			break;
-		case "Virgo":
-			ps.println("Naciste entre el 23 de agosto al 22 de septiembre, sos 'Shaka de Virgo'");
-			break;
-		case "Libra":
-			ps.println("Naciste entre el 23 de septiembre al 22 de octubre, sos 'Dohko de Libra'");
-			break;
-		case "Escorpio":
-			ps.println("Naciste entre el 23 de octubre al 21 de noviembre, sos 'Milo de Escorpio'");
-			break;
-		case "Sagitario":
-			ps.println("Naciste entre el 22 de noviembre al 21 de diciembre, sos 'Aioros de Sagitario'");
-			break;
-		case "Capricornio":
-			ps.println("Naciste entre el 22 de diciembre al 19 de enero, sos 'Shura de Capricornio'");
-			break;
-		case "Acuario":
-			ps.println("Naciste entre el 20 de enero al 18 de febrero, sos 'Camus de Acuario'");
-			break;
-		case "Piscis":
-			ps.println("Naciste entre el 19 de febrero al 20 de marzo, sos 'Afrodita de Piscis'");
-			break;
-		}
-		
-	}
+		Arrays.toString(numeros);
+		String aux2 = "";
+		Collection.sort(numeros);
+		ps.println("Los numeros se ordenan asi: ");
+		for(String apellido:apellidos) {
+			aux2 += apellido.concat(", ");}
+		ps.println(aux2.substring(0, (aux2.length() - 2)));
+		}}}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	//entrada de datos
 	public static String entradaDeDatosSTR(){
 		String cadena = "";
 		try {
@@ -179,5 +87,4 @@ public class main {
 		
 		return cadena;
 	}
-
 }
