@@ -65,7 +65,7 @@ public class Fichero {
 		}
 		
 		
-		return null;
+		return "No hay datos para leer";
 		
 	}
 	
