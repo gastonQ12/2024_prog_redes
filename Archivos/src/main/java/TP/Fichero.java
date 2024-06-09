@@ -26,20 +26,14 @@ public class Fichero {
 			if(!a.exists()) {
 				try {
 					a.createNewFile();
-					FileOutputStream fosA = new FileOutputStream(a,true);
-					ps = new PrintStream(fosA);
-					ps.println(p.mostrarDatos());
-					ps.flush();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			else {
-			FileOutputStream fosA = new FileOutputStream(a,false);
+			FileOutputStream fosA = new FileOutputStream(a,true);
 			ps = new PrintStream(fosA);
 			ps.println(p.mostrarDatos());
 			ps.flush();
-			}
 		} catch (FileNotFoundException e) {
 
 			e.printStackTrace();
