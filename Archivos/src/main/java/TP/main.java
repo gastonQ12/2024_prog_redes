@@ -15,11 +15,12 @@ public class main {
 		
 		boolean i=false;		
 		while (i==false) {
-			ps.println("1)Es texto \n2)Añadir producto \n3)guardar productos \n0) salir");
+			ps.println("1)Es texto \n2)Añadir producto \n3)guardar productos \n4)Mostrar productos \n0) salir");
 			int aux=Integer.parseInt(entradaDatos());
 			if(aux==1) {ps.println(numSwitch(esNumero(entradaDatos())));}
 			if(aux==2) {listaProductos.add(CrearProducto());}
 			if(aux==3) {saveProductos(listaProductos, a);}
+			if(aux==4) {MostrarProductos(a);}
 			if(aux==0) {i=true;}		
 			
 		}
@@ -51,6 +52,14 @@ public class main {
 	}*/
 
 
+	public static void MostrarProductos(Fichero a) {
+		PrintStream ps = new PrintStream(System.out);
+		ps.println(a.leerArchivo(a.getArchivo()));
+	}
+	
+	
+	
+	
 	public static Producto CrearProducto() {
 		PrintStream ps = new PrintStream(System.out);
 		ps.println("ingrese el nombre \t");
