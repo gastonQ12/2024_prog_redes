@@ -15,7 +15,7 @@ public class main {
 		
 		boolean i=false;		
 		while (i==false) {
-			ps.println("1)Es texto \n2)Añadir producto \n3)guardar productos \n4)Mostrar productos \n0) salir");
+			ps.println("\u001B[34m 1) \u001B[0m\u001B[36m Es texto \u001B[0m \n\u001B[34m 2) \u001B[0m\u001B[36m Añadir producto \u001B[0m \n\u001B[34m 3) \u001B[0m\u001B[36m Guardar productos \u001B[0m \n\u001B[34m 4) \u001B[0m\u001B[36m Mostrar productos \u001B[0m \n\u001B[34m 0) \u001B[0m\u001B[36m Salir \u001B[0m");
 			int aux=Integer.parseInt(entradaDatos());
 			if(aux==1) {ps.println(numSwitch(esNumero(entradaDatos())));}
 			if(aux==2) {listaProductos.add(CrearProducto());}
@@ -62,13 +62,13 @@ public class main {
 	
 	public static Producto CrearProducto() {
 		PrintStream ps = new PrintStream(System.out);
-		ps.println("ingrese el nombre \t");
+		ps.println("\u001B[91mingrese el nombre: \u001B[0m");
 		String nombre = entradaDatos();
-		ps.println("ingrese el precio de compra");
+		ps.println("\u001B[91mingrese el precio de compra: \u001B[0m");
 		Double precio = Double.parseDouble(entradaDatos());
-		ps.println("ingrese el precio de venta");
+		ps.println("\u001B[91mingrese el precio de venta: \u001B[0m");
 		double venta = Double.parseDouble(entradaDatos());
-		ps.println("ingrese el stock");
+		ps.println("\u001B[91mingrese el stock: \u001B[0m");
 		int stock = Integer.parseInt(entradaDatos());
 		Producto p = new Producto(nombre, precio, venta, stock);
 		return p;
