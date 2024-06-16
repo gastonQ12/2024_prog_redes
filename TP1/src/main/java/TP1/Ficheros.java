@@ -2,6 +2,8 @@ package TP1;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -9,12 +11,9 @@ import java.io.PrintStream;
 public class Ficheros {
 
 
-	File archivo;
 	PrintStream ps = new PrintStream(System.out);
 	InputStreamReader isr = new InputStreamReader(System.in);
 	BufferedReader br =new BufferedReader(isr);
-	
-	
 	
 public String entradaDeDatos(){
 	
@@ -32,13 +31,7 @@ public String entradaDeDatos(){
 	} catch (IOException e) {
 		e.printStackTrace();
 	}
-	
-	
-	
 	return cadena;
-}
-public File getArchivo() {
-	return archivo;
 }
 public String isrEntrada() {
 	
@@ -51,5 +44,7 @@ public String isrEntrada() {
 	
 	return null;
 }
-	
+
+
+
 }
