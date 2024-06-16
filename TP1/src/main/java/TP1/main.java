@@ -30,7 +30,7 @@ public class main {
 			}
 			}
 		//for(int i=0; i<=4;i++){
-			//f.ps.println(array.get(i));}
+		//f.ps.println(array.get(i));}
 		return array;
 	}
 	public static void almacenarNumerosFile(Ficheros f, Archivo a, ArrayList<Integer> lista) {
