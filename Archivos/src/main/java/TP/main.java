@@ -9,56 +9,44 @@ public class main {
 
 		PrintStream ps = new PrintStream(System.out);	
 		ArrayList<Producto> listaProductos = new ArrayList();
-		Fichero a = new Fichero("C:\\archJava\\","datos", ".txt");
+		ps.print("Ingrese la ruta en donde se guardaran los archivos:");
+		String rut = entradaDatos();
+		Fichero a = new Fichero(/*ingresar ruta*/rut,"datos", ".txt");
 		
-		
-		
-		boolean i=false;		
+		boolean i=false;		 
 		while (i==false) {
 			ps.println("\u001B[34m 1) \u001B[0m\u001B[36m Es texto \u001B[0m \n\u001B[34m 2) \u001B[0m\u001B[36m Añadir producto \u001B[0m \n\u001B[34m 3) \u001B[0m\u001B[36m Guardar productos \u001B[0m \n\u001B[34m 4) \u001B[0m\u001B[36m Mostrar productos \u001B[0m \n\u001B[34m 0) \u001B[0m\u001B[36m Salir \u001B[0m");
 			int aux=Integer.parseInt(entradaDatos());
-			if(aux==1) {ps.println(numSwitch(esNumero(entradaDatos())));}
+			if(aux==1) {numSwitch(entradaDatos(), ps);}
 			if(aux==2) {listaProductos.add(CrearProducto());}
 			if(aux==3) {saveProductos(listaProductos, a);}
 			if(aux==4) {MostrarProductos(a);}
-			if(aux==0) {i=true;}		
-			
+			if(aux==0) {i=true;}					
+			}
 		}
-	
+	public static Number numSwitch (String valor, PrintStream ps) {
+			if(esNumero(valor) == true) {
+				if(valor.contains(".")) {
+				     Float aux= Float.parseFloat(valor);
+				     ps.println("float");
+				     return aux;}
+				if(valor.contains(",")){
+					valor.replace(',', '.');
+				     ps.println("float");
+					Float aux= Float.parseFloat(valor);
+				    return aux;
+				}
+			     ps.print("Integer");
+			     int aux= Integer.parseInt(valor);
+			     return aux;
+			}
+			ps.println("No es un numero");
+			return null;
 	}
-		
-
-	
-	public static float numSwitch(String valor) {
-			
-			if(valor.contains(".")) {
-			     Float aux= Float.parseFloat(valor);
-			     System.out.println("float");
-			     return aux;
-			}/*
-			if(valor.contains(",")) {
-				 
-			     Float aux= Float.parseFloat(valor);
-			     return aux;
-			}*/
-			return 0;
-		}/*
-	public static int numSwitch(String valor, Fichero a) {
-		
-		     int aux= Integer.parseInt(valor);
-		     System.out.println("int");
-		     return aux;
-		return 0;
-	}*/
-
-
 	public static void MostrarProductos(Fichero a) {
 		PrintStream ps = new PrintStream(System.out);
 		ps.println(a.leerArchivo(a.getArchivo()));
 	}
-	
-	
-	
 	
 	public static Producto CrearProducto() {
 		PrintStream ps = new PrintStream(System.out);
@@ -78,16 +66,12 @@ public class main {
 		
 		for(Producto p:listaP) {
 			arch.guardar(arch.getArchivo(), p);
-		}		
+		}	
 	}
-	
-	private static String esNumero(String valor){
-        if(valor != null && valor.matches("[0-9.]+")) {
-        	return valor;}
-        return "0";
+	private static boolean esNumero(String valor){
+       return valor != null && valor.matches("[0-9.]+");
+        	
     }
-
-	
 	public static String entradaDatos(){
 		String cadena = "";
 		try {
