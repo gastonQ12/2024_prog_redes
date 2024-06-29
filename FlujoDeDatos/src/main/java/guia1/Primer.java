@@ -4,8 +4,25 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 public class Primer {
-
 	
+public void menu(){
+	PrintStream ps = new PrintStream(System.out);
+	boolean i=false;		
+	while (i==false) {
+		ps.println("\n1) Sueldo Bruto \n2) calcular angulos \n3) calcular perimetro \n4) Calcular temperatura \n5) Calcular tiempo \n6) Planes de pago \n7) Zodiaco \n0) salir");
+		int aux=Integer.parseInt(entradaDeDatosSTR());
+		if(aux==1) {calcularSueldoBruto();}
+		if(aux==2) {sumarAngulos();}
+		if(aux==3) {calcularPerimetro();}
+		if(aux==4) {calculartemperatura();}
+		if(aux==5) {calcularTiempo();}
+		if(aux==6) {planesPago();}
+		if(aux==7) {caballerosDeZodiaco();}
+		if(aux==0) {i=true;}			
+	}
+	
+	
+}
 //1.A calcular sueldo
 public void calcularSueldoBruto(){
 	PrintStream ps = new PrintStream(System.out);

@@ -10,13 +10,14 @@ import java.util.List;
 public class main {
 	public static void main(String[] args) {
 		PrintStream ps = new PrintStream(System.out);
+		Segundo s = new Segundo();
 		Primer p = new Primer();
 		boolean i=false;		
 		while (i==false) {
-			ps.println("\n1) Sueldo Bruto \n2) calcular angulos \n3) calcular perimetro \n4) Calcular temperatura \n5) Calcular tiempo \n6) Planes de pago \n7) Zodiaco \n0) salir");
+			ps.println("\n1) menu ejercicios primer punto \n2) calcular angulos \n3) calcular perimetro \n4) Calcular temperatura \n5) Calcular tiempo \n6) Planes de pago \n7) Zodiaco \n0) salir");
 			int aux=Integer.parseInt(entradaDeDatosSTR());
-			if(aux==1) {ordenarApellidos();}
-			if(aux==2) {p.sumarAngulos();}
+			if(aux==1) {p.menu();}
+			if(aux==2) {s.esPar();}
 			if(aux==3) {p.calcularPerimetro();}
 			if(aux==4) {p.calculartemperatura();}
 			if(aux==5) {p.calcularTiempo();}
@@ -30,7 +31,6 @@ public class main {
 		
 	}
 	
-	//2.A ordenar apellidos
 
 	
 
@@ -51,5 +51,4 @@ public class main {
 		
 		return cadena;
 	}
-}
 }
