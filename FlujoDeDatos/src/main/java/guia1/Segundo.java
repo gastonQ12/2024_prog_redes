@@ -14,20 +14,22 @@ public void menu() {
 	PrintStream ps = new PrintStream(System.out);
 	boolean i=false;		
 	while (i==false) {
-		ps.println("\n1) Ordenar apellidos \n2) Sacar numero menor \n3) Par o impar \n4) division de dos numeros reales \n5) Calcular tiempo \n6) Planes de pago \n7) Zodiaco \n0) salir");
+		ps.println("\n1) Ordenar apellidos \n2) Sacar numero menor \n3) Par o impar \n4) division de dos numeros reales \n5) calcular zodiaco \n6) Apeliido mas largo \n7) Tabla de mucltiplicar \n8) Saber si es primo \n0) salir");
 		int aux=Integer.parseInt(r.leer());
 		if(aux==1) {ordenarApellidos();}
 		if(aux==2) {sacarMenor();}
 		if(aux==3) {esPar();}
 		if(aux==4) {dividirXmenor();}
-		if(aux==5) {();}
-		if(aux==6) {();}
-		if(aux==7) {();}
+		if(aux==5) {BuscarZodiaco();}
+		if(aux==6) {bestoApellido();}
+		if(aux==7) {tablaMultipicar();}
+		if(aux==8) {ps.println(esPrimo());}
 		if(aux==0) {i=true;}			
 	}
 	
 	
 }
+// 2.A ordenar apellidos
 public void ordenarApellidos(){
 	PrintStream ps = new PrintStream(System.out);
 	Reader r = new Reader();
@@ -44,9 +46,7 @@ public void ordenarApellidos(){
 		aux2 += apellido.concat(", ");}
 	ps.println(aux2.substring(0, (aux2.length() - 2)));
 }
-
 //2.B sacar menor
-
 public void sacarMenor() {
 	PrintStream ps = new PrintStream(System.out);
 	Reader r = new Reader();
@@ -91,57 +91,92 @@ public void dividirXmenor() {
 	else{ps.println("No se puede dividir por 0");}
 }
 //2.E division
-public void caballerosDeZodiaco(){
+public void BuscarZodiaco(){
 	PrintStream ps = new PrintStream(System.out);
 	Reader r = new Reader();
+	String[] meses = { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+
+	ps.println("Ingrese el mes que nacio: ");
+	String mesN = r.leer();	
 	ps.println("Ingrese el dia que nacio: ");
-	String dia = r.leer();
-	ps.println();
-	String mes = r.leer();		
-	String mesF = mes.substring(0, 1).toUpperCase().concat(mes.substring(1).toLowerCase());
-	
-	
-	
-	
-	
-	switch(signo){
-	case "Aries":
-		ps.println("Naciste entre el 21 de marzo y el 19 de abril, sos 'Mu de Aries'");
-		break;
-	case "Tauro":
-		ps.println("Naciste entre el 20 de abril al 20 de mayo, sos 'Aldebarán de Tauro'");
-		break;
-	case "Geminis":
-		ps.println("Naciste entre el 21 de mayo al 20 de junio, sos 'Saga de Géminis'");
-		break;
-	case "Cencer":
-		ps.println("Naciste entre el 21 de junio al 22 de julio, sos 'Deathmask de Cáncer'");
-		break;
-	case "Leo":
-		ps.println("Naciste entre el 23 de julio al 22 de agosto, sos 'Aioria de Leo'");
-		break;
-	case "Virgo":
-		ps.println("Naciste entre el 23 de agosto al 22 de septiembre, sos 'Shaka de Virgo'");
-		break;
-	case "Libra":
-		ps.println("Naciste entre el 23 de septiembre al 22 de octubre, sos 'Dohko de Libra'");
-		break;
-	case "Escorpio":
-		ps.println("Naciste entre el 23 de octubre al 21 de noviembre, sos 'Milo de Escorpio'");
-		break;
-	case "Sagitario":
-		ps.println("Naciste entre el 22 de noviembre al 21 de diciembre, sos 'Aioros de Sagitario'");
-		break;
-	case "Capricornio":
-		ps.println("Naciste entre el 22 de diciembre al 19 de enero, sos 'Shura de Capricornio'");
-		break;
-	case "Acuario":
-		ps.println("Naciste entre el 20 de enero al 18 de febrero, sos 'Camus de Acuario'");
-		break;
-	case "Piscis":
-		ps.println("Naciste entre el 19 de febrero al 20 de marzo, sos 'Afrodita de Piscis'");
-		break;
+	int dia = Integer.parseInt(r.leer());	
+	mesN = mesN.substring(0, 1).toUpperCase().concat(mesN.substring(1).toLowerCase());
+	int aux = 0;
+	for( int i=0; i<=11; i++) {
+		if(meses[i]==mesN){
+			aux = i + 1;
+			}
+		}
+	if((dia >=21 && aux == 3) || (dia <= 19 && aux == 4)  ) 
+		ps.println("Tu signo del zodiaco es Aries");
+	if((dia >=20 && aux == 4) || (dia <= 20 && aux == 5)  ) 
+		ps.println("Tu signo del zodiaco es Tauro");
+	if((dia >=21 && aux == 5) || (dia <= 20 && aux == 6)  ) 
+		ps.println("Tu signo del zodiaco es Geminis");
+	if((dia >=21 && aux == 6) || (dia <= 22 && aux == 7)  ) 
+		ps.println("Tu signo del zodiaco es Cancer");
+	if((dia >=23 && aux == 7) || (dia <= 22 && aux == 8)  ) 
+		ps.println("Tu signo del zodiaco es Leo");
+	if((dia >=23 && aux == 8) || (dia <= 22 && aux == 9)  ) 
+		ps.println("Tu signo del zodiaco es Virgo");
+	if((dia >=23 && aux == 9) || (dia <= 22 && aux == 10)  ) 
+		ps.println("Tu signo del zodiaco es Libra");
+	if((dia >=23 && aux == 10) || (dia <= 21 && aux == 11)  ) 
+		ps.println("Tu signo del zodiaco es Escorpio");
+	if((dia >=23 && aux == 11) || (dia <= 21 && aux == 12)  ) 
+		ps.println("Tu signo del zodiaco es Sagitario");
+	if((dia >=22 && aux == 12) || (dia <= 19 && aux == 1)  ) 
+		ps.println("Tu signo del zodiaco es Capricornio");
+	if((dia >=20 && aux == 1) || (dia <= 18 && aux == 2)  ) 
+		ps.println("Tu signo del zodiaco es Acuario");
+	if((dia >=19 && aux == 2) || (dia <= 20 && aux == 3)  ) 
+		ps.println("Tu signo del zodiaco es Piscis");
+}
+//2.F Apellido mas largo
+public void bestoApellido(){
+	PrintStream ps = new PrintStream(System.out);
+	Reader r = new Reader();
+	ps.println("Ingrese su nombre");
+	String nombre1 = r.leer();
+	ps.println("Ingrese su apellido");
+	String apellido1 = r.leer();
+	ps.println("Ingrese otro nombre");
+	String nombre2 = r.leer();
+	ps.println("Ingrese otro apellido");
+	String apellido2 = r.leer();
+	if(apellido1.length() > apellido2.length()) 
+		ps.println("el apellido de " + nombre1 + " es el mas largo");	
+	if(apellido1.length() < apellido2.length()) 
+		ps.println("el apellido de " + nombre2 + " es el mas largo");
+	if(apellido1.length() == apellido2.length()) 
+		ps.println("Ambos apellidos tienen las misma longitud");	
+}
+//2.G Tablas de multiplicar
+public void tablaMultipicar() {
+	PrintStream ps = new PrintStream(System.out);
+	Reader r = new Reader();
+	ps.println("Ingrese el numero: ");
+	int num= Integer.parseInt(r.leer());
+	int aux = 0;
+	for( int i=1; i<=10 ; i++ ) {
+		aux = i*num;
+		ps.println(num + "*" + i + "=" + aux);
 	}
 }
+//2.H Numero es primo
+public String esPrimo() {
+	PrintStream ps = new PrintStream(System.out);
+	Reader r = new Reader();
+	ps.println("Ingrese un numero: ");
+	int num = Integer.parseInt(r.leer()); 
+	for (int i = 2; i <= Math.sqrt(num); i++) {
+        if (num % i == 0) 
+        	return "el numero no es primo";  
+    }
+	return "el numero es primo";  	
+}
+
+
+
 
 }

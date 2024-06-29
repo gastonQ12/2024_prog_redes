@@ -60,7 +60,6 @@ public void calculartemperatura() {
 	int gc = ((Integer.parseInt(entradaDeDatosSTR())-32)*5/9);
 	ps.printf("En celsius es:%d \n", gc);
 }
-
 //1.E calcular tiempo
 public void calcularTiempo() {
 	
@@ -88,7 +87,6 @@ public void calcularTiempo() {
 	}
 	ps.printf("Dias:%d \nHoras:%d \nMnutos:%d \nSegundos:%d \n",dia, hora, minuto, seg);
 }
-
 //1.F planes de pago
 public void planesPago() {
 	PrintStream ps = new PrintStream(System.out);
@@ -103,7 +101,6 @@ public void planesPago() {
 	if(aux==4) {ps.println(precioA*1.25);}
 	else {ps.println("opcion no disponible");}
 }
-
 //1.G Zodiaco
 public void caballerosDeZodiaco(){
 	PrintStream ps = new PrintStream(System.out);
@@ -150,7 +147,6 @@ public void caballerosDeZodiaco(){
 	}
 	
 }
-
 //entrada de datos
 public String entradaDeDatosSTR(){
 	String cadena = "";

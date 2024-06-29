@@ -12,28 +12,17 @@ public class main {
 		PrintStream ps = new PrintStream(System.out);
 		Segundo s = new Segundo();
 		Primer p = new Primer();
+		Tercero t = new Tercero();
 		boolean i=false;		
 		while (i==false) {
-			ps.println("\n1) menu ejercicios primer punto \n2) calcular angulos \n3) calcular perimetro \n4) Calcular temperatura \n5) Calcular tiempo \n6) Planes de pago \n7) Zodiaco \n0) salir");
+			ps.println("\n1) menu ejercicios primer punto \n2) menu ejercicios segundo punto \n3) menu ejercicios tercer punto \n0) salir");
 			int aux=Integer.parseInt(entradaDeDatosSTR());
 			if(aux==1) {p.menu();}
-			if(aux==2) {s.esPar();}
-			if(aux==3) {p.calcularPerimetro();}
-			if(aux==4) {p.calculartemperatura();}
-			if(aux==5) {p.calcularTiempo();}
-			if(aux==6) {p.planesPago();}
-			if(aux==7) {p.caballerosDeZodiaco();}
+			if(aux==2) {s.menu();}
+			if(aux==3) {t.menu();}
 			if(aux==0) {i=true;}			
 		}
-		
-		
-		
-		
 	}
-	
-
-	
-
 	//entrada de datos
 	public static String entradaDeDatosSTR(){
 		String cadena = "";
