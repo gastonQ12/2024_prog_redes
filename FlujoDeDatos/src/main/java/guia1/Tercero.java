@@ -23,6 +23,7 @@ public void menu() {
 		if(aux==3) {ingresarNums2();}
 		if(aux==4) {leerDatos(ingresarNums2());}
 		if(aux==5) {borrarDatos(ingresarNums2());}
+		
 		if(aux==0) {i=true;}			
 		}
 }
@@ -102,7 +103,7 @@ public void borrarDatos(Ficheros numeros) {
                 int num = Integer.parseInt(linea.trim());
 			    if(num%2 == 0) {lineas.add(linea);}}
 			for (String lineaE : lineas) {
-			    PrintWriter pw = new PrintWriter(new FileWriter(numeros.getArchivo(), false));
+			    PrintWriter pw = new PrintWriter(new FileWriter(numeros.getArchivo(), true));
                 pw.println(lineaE);
             }
 			
