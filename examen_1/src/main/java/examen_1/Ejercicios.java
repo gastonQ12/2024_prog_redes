@@ -1,4 +1,4 @@
-package examen;
+package examen_1;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -79,5 +80,82 @@ public ArrayList borrarRegistro(File arch) {
 		
 	}
 		
+File arch = new File("C:\\Users\\Redes-20\\Documents\\GitHub\\2024-Prog_Redes\\examen_1\\datos.dat");
 	
+	public File getArchivo() {
+		return this.arch;
+	}
+	public void arreglarArchivo(File original)
+	{
+		Archivos ar = new Archivos();
+		File copia = new File("copia.tmp");
+		FileReader Fr = null;
+		BufferedReader Br = null;
+		FileWriter Fw = null;
+		PrintWriter Pw = null;
+		
+		try {
+			if( !original.exists() )
+				ar.createFilePrintStream(this.getArchivo());
+				
+			Fr = new FileReader(original);
+			Br = new BufferedReader(Fr);
+			
+			if( !copia.exists() )
+			{
+				Fw = new FileWriter(copia , true);
+				Pw = new PrintWriter( Fw );
+				
+				int contador = 0;
+				String renglon = "";
+				while(   (renglon=Br.readLine()) != null   )
+				{
+					
+					renglon = renglon.replace(".",";"); 
+					Pw.println(renglon);
+					contador++;
+					
+				}
+				Pw.close();
+				Fw.close();
+			}
+			Br.close();
+			Fr.close();
+			
+			if( original.exists() )
+				original.delete();
+			
+			if( copia.exists() )
+				copia.renameTo( original );
+			
+		} catch(FileNotFoundException e){
+			Logger.getLogger(Archivos.class.getName()).log(Level.WARNING, null, e);
+		} catch (IOException e) {
+			Logger.getLogger(Archivos.class.getName()).log(Level.WARNING, null, e);
+		}finally {
+			
+		}
+		
+	}
+	
+	public void mostrarDatos(File archivo) {
+		PrintStream ps = new PrintStream(System.out);
+
+		Archivos ar = new Archivos();
+		String lec = ar.leerConReader(archivo);
+		
+		
+		String[] Acomodar = {"Color", "Animal", "Instrumento", "Comida"};
+		
+		
+		ps.println(Utils.ANSI_RED + Acomodar[0] + "|" + Acomodar[1]+ "|"  + Acomodar[2]+ "|"  + Acomodar[3]+Utils.ANSI_RESET);
+		ps.println();
+		
+		lec = lec.replace(";","|");
+		
+		ps.println(Utils.ANSI_GREEN +lec+ Utils.ANSI_RESET);
+		
+	
+	}
+		
 }
