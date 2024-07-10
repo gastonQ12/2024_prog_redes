@@ -14,11 +14,9 @@ import java.util.logging.Logger;
 public class Ejercicios {
 	static Ficheros f = new Ficheros();
 	static ArrayList<String> registros = new ArrayList<String>();
-	
-	
-	
 
-
+	
+	//Borra el registro y devuelve el ArrayList nuevo
 public ArrayList borrarRegistro(File arch) {
 	registros = f.leerArchivo(arch);
 	f.ps.println(registros);

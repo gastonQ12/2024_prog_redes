@@ -13,7 +13,8 @@ import java.util.logging.Logger;
 public class main {
 
 	public static void main(String[] args) {
-		
+
+		// guardar archivos, falto la adaptacion al proyecto final 
 		Ficheros f = new Ficheros();
 		File arch = f.getArchivo();
 		Ejercicios ej = new Ejercicios();
