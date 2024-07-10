@@ -15,7 +15,7 @@ public class main {
 
 	public static void main(String[] args) {
 		Ejercicios ej = new Ejercicios();
-		File arch = new File("C:\\\\archJava\\\\datos.dat");
+		File arch = new File("C:\\datos.dat");
 		ej.arregloArchivo(arch);
 		Menu(arch);
 	
