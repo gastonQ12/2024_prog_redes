@@ -48,7 +48,7 @@ public class main {
             System.out.printf("\033[32m%d. %s - Tiempo: %d ms\033[0m\n", 
                     i + 1, equipo.getNombre(), equipo.getTiempoTotal());
         }
-        System.out.printf("\033[31m\nel equipo ganador es %s con %d ms\033[0m\n", 
+        System.out.printf("el equipo ganador es %s con %d ms", 
                 equipos.get(0).getNombre(), equipos.get(0).getTiempoTotal());
     }
 
