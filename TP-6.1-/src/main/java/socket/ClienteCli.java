@@ -43,19 +43,28 @@ public class ClienteCli implements Runnable {
 		{
 			try {
 				//identificaos el mensaje
+				// Recibir el mensaje
 				msgRecibido = this.disCliente.readUTF().trim();
-				
-				//identificar el destinaratio
-				//   destino # mensaje a enviar
-				// Furno# Todo bien?
-				if( msgRecibido.contains("#") )
-				{
-					StringTokenizer token = new StringTokenizer(msgRecibido,"#");
-					destino = token.nextToken().trim().toLowerCase();
-					msgRecibido = token.nextToken().trim();
-				}else {
-					destino = "";
+
+				// Comando: Mostrar clientes conectados
+				if (msgRecibido.equalsIgnoreCase("/clientes")) {
+				    StringBuilder clientes = new StringBuilder(Servidor.ANSI_GREEN + "Clientes conectados:\n" + Servidor.ANSI_RESET);
+				    for (ClienteCli cli : Servidor.ClientesConectados) {
+				        clientes.append(" - ").append(cli.getNickName()).append("\n");
+				    }
+				    this.dosCliente.writeUTF(clientes.toString());
+				    continue; // No procesar más el mensaje, es un comando interno
 				}
+
+				// Procesar destino y mensaje
+				if (msgRecibido.contains("#")) {
+				    StringTokenizer token = new StringTokenizer(msgRecibido, "#");
+				    destino = token.nextToken().trim().toLowerCase();
+				    msgRecibido = token.nextToken().trim();
+				} else {
+				    destino = "";
+				}
+
 				
 				ps.println("\n"
 						+ Servidor.ANSI_PURPLE
@@ -76,37 +85,44 @@ public class ClienteCli implements Runnable {
 				
 				//filtro de comandos
 				//  mensaje= /salir
-				
-				
-				
+							
 				//enviar mensaje
-				for( ClienteCli cli : Servidor.ClientesConectados)
-				{
-					//si el mensaje a enviar esta vacio
-					if(msgRecibido.equalsIgnoreCase(""))
-						break;
-					
-					if(cli.getNickName().toLowerCase().equalsIgnoreCase(destino) && this.isConected )
-					{
-						cli.dosCliente.writeUTF(Servidor.ANSI_YELLOW 
-								+this.nickName
-								+ ":"
-								+Servidor.ANSI_RESET
-								+ msgRecibido
-							);
-						break;
-					}else if(destino.equalsIgnoreCase("") && 
-							this.isConected && 
-							!cli.getNickName().toLowerCase().equalsIgnoreCase(this.nickName) ){
-						cli.dosCliente.writeUTF(Servidor.ANSI_YELLOW 
-								+this.nickName
-								+ ":"
-								+Servidor.ANSI_RESET
-								+ msgRecibido
-							);
-					}
+				boolean clienteEncontrado = false;
+				for (ClienteCli cli : Servidor.ClientesConectados) {
+				    if (msgRecibido.equalsIgnoreCase("")) break;
+
+				    if (cli.getNickName().equalsIgnoreCase(destino) && this.isConected) {
+				        clienteEncontrado = true;
+				        try {
+				            cli.dosCliente.writeUTF(Servidor.ANSI_YELLOW
+				                    + this.nickName
+				                    + ": "
+				                    + Servidor.ANSI_RESET
+				                    + msgRecibido);
+				        } catch (IOException ex) {
+				            ps.println(Servidor.ANSI_RED + "<Cliente no disponible: " + destino.toUpperCase() + ">" + Servidor.ANSI_RESET);
+				        }
+				        break;
+				    } else if (destino.equalsIgnoreCase("")
+				            && this.isConected
+				            && !cli.getNickName().equalsIgnoreCase(this.nickName)) {
+				        try {
+				            cli.dosCliente.writeUTF(Servidor.ANSI_YELLOW
+				                    + this.nickName
+				                    + ": "
+				                    + Servidor.ANSI_RESET
+				                    + msgRecibido);
+				        } catch (IOException ex) {
+				            ps.println(Servidor.ANSI_RED + "<Cliente no disponible: " + cli.getNickName().toUpperCase() + ">" + Servidor.ANSI_RESET);
+				        }
+				    }
 				}
-				
+
+				if (!clienteEncontrado && !destino.equalsIgnoreCase("")) {
+				    ps.println(Servidor.ANSI_RED + "<Cliente no encontrado: " + destino.toUpperCase() + ">" + Servidor.ANSI_RESET);
+				}
+
+			
 			} catch (IOException ex) {
 				Logger.getLogger(ClienteCli.class.getName()).log(Level.SEVERE,null,ex);
 			}
