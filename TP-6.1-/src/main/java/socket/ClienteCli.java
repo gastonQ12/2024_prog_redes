@@ -10,12 +10,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ClienteCli implements Runnable {
-	
+	private boolean isBanned;
+	private long banEndTime;
+    
     String nickName = "";
     Socket sock;
     Thread hilo;
-    
-	final DataInputStream disCliente;
+    final DataInputStream disCliente;
     final DataOutputStream dosCliente;
     boolean isConected;
     PrintStream ps;
@@ -32,148 +33,167 @@ public class ClienteCli implements Runnable {
     }
 
     
+    @Override
+    public void run() {
+        String msgRecibido = "";
+        String destino = "";
+
+        while (this.sock.isConnected() && this.isConected) {
+            try {
+                // Leer mensaje recibido
+                msgRecibido = this.disCliente.readUTF().trim();
+
+                // Validar palabras prohibidas
+                if (contienePalabraProhibida(msgRecibido)) {
+                    this.dosCliente.writeUTF(Servidor.ANSI_RED 
+                            + "[ERROR] Tu mensaje contiene palabras no permitidas y fue cancelado." 
+                            + Servidor.ANSI_RESET);
+                    continue; // No procesar más este mensaje
+                }
+
+                // Identificar el destino y contenido del mensaje
+                if (msgRecibido.contains("#")) {
+                    StringTokenizer token = new StringTokenizer(msgRecibido, "#");
+                    destino = token.nextToken().trim().toLowerCase();
+                    msgRecibido = token.nextToken().trim();
+                } else {
+                    destino = "";
+                }
+
+                ps.println("\n"
+                        + Servidor.ANSI_PURPLE
+                        + "El cliente "
+                        + Servidor.ANSI_GREEN
+                        + this.nickName
+                        + Servidor.ANSI_PURPLE
+                        + " envia: "
+                        + Servidor.ANSI_YELLOW
+                        + msgRecibido + "\n\t"
+                        + Servidor.ANSI_PURPLE
+                        + " al cliente =>"
+                        + Servidor.ANSI_CYAN
+                        + (destino.equalsIgnoreCase("") ? " Todos" : " ".concat(destino.toUpperCase()))
+                        + "\n"
+                        + Servidor.ANSI_RESET
+                );
+
+                // Enviar mensaje al destino (misma lógica actual)
+                enviarMensaje(destino, msgRecibido);
+
+            } catch (IOException ex) {
+                Logger.getLogger(ClienteCli.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    // Método para verificar si un mensaje contiene palabras prohibidas
+    private boolean contienePalabraProhibida(String mensaje) {
+        String mensajeLower = mensaje.toLowerCase(); // Convertir a minúsculas
+        for (String palabra : Servidor.PALABRAS_PROHIBIDAS) {
+            if (mensajeLower.contains(palabra)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Método para enviar el mensaje (lógica existente, optimizada)
+    private void enviarMensaje(String destino, String mensaje) {
+        boolean clienteEncontrado = false;
+        for (ClienteCli cli : Servidor.ClientesConectados.values()) {
+            if (mensaje.equalsIgnoreCase("")) break;
+
+            // Mensaje Privado (MP)
+            if (cli.getNickName().equalsIgnoreCase(destino) && this.isConected) {
+                clienteEncontrado = true;
+                try {
+                    cli.dosCliente.writeUTF("[MP] " + this.nickName + ": " + mensaje);
+                    this.dosCliente.writeUTF("[MP] enviado a " + cli.getNickName() + ": " + mensaje);
+                } catch (IOException ex) {
+                    ps.println(Servidor.ANSI_RED + "<Cliente no disponible: " + destino.toUpperCase() + ">" + Servidor.ANSI_RESET);
+                }
+                break;
+            }
+
+            // Mensaje Global
+            if (destino.equalsIgnoreCase("") && this.isConected && !cli.getNickName().equalsIgnoreCase(this.nickName)) {
+                try {
+                    cli.dosCliente.writeUTF(this.nickName + ": " + mensaje);
+                } catch (IOException ex) {
+                    ps.println(Servidor.ANSI_RED + "<Cliente no disponible: " + cli.getNickName().toUpperCase() + ">" + Servidor.ANSI_RESET);
+                }
+            }
+        }
+
+        // Notificar si el destinatario no fue encontrado
+        if (!clienteEncontrado && !destino.equalsIgnoreCase("")) {
+            try {
+                this.dosCliente.writeUTF("[ERROR] El cliente " + destino.toUpperCase() + " no está conectado o no existe.");
+            } catch (IOException ex) {
+                Logger.getLogger(ClienteCli.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            ps.println(Servidor.ANSI_RED + "<Cliente no encontrado: " + destino.toUpperCase() + ">" + Servidor.ANSI_RESET);
+        }
+    }
+
+
+
     
     
-	@Override
-	public void run() {
-		String msgRecibido = "";
-		String destino = "";
-		
-		while( this.sock.isConnected() && this.isConected )
-		{
-			try {
-				//identificaos el mensaje
-				// Recibir el mensaje
-				msgRecibido = this.disCliente.readUTF().trim();
+    void notificarClientes(boolean estado) {
+    	for (ClienteCli cli : Servidor.ClientesConectados.values()) {
+            if (!cli.getNickName().equals(this.nickName) && cli.isConected()) {
+                try {
+                    if (estado) {
+                        cli.dosCliente.writeUTF(Servidor.ANSI_GREEN
+                                + "\t---"
+                                + this.getNickName()
+                                + " se ha CONECTADO---"
+                                + Servidor.ANSI_RESET
+                        );                        
+                    } else {
+                        cli.dosCliente.writeUTF(Servidor.ANSI_RED
+                                + "\t---"
+                                + this.getNickName()
+                                + " se ha DESCONECTADO---"
+                                + Servidor.ANSI_RESET
+                        );
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(ClienteCli.class.getName()).log(Level.SEVERE,null,ex);
+                }
+            }
+        }
+    }
+    public boolean isBanned() {
+        return isBanned;
+    }
 
-				// Comando: Mostrar clientes conectados
-				if (msgRecibido.equalsIgnoreCase("/clientes")) {
-				    StringBuilder clientes = new StringBuilder(Servidor.ANSI_GREEN + "Clientes conectados:\n" + Servidor.ANSI_RESET);
-				    for (ClienteCli cli : Servidor.ClientesConectados) {
-				        clientes.append(" - ").append(cli.getNickName()).append("\n");
-				    }
-				    this.dosCliente.writeUTF(clientes.toString());
-				    continue; // No procesar más el mensaje, es un comando interno
-				}
-
-				// Procesar destino y mensaje
-				if (msgRecibido.contains("#")) {
-				    StringTokenizer token = new StringTokenizer(msgRecibido, "#");
-				    destino = token.nextToken().trim().toLowerCase();
-				    msgRecibido = token.nextToken().trim();
-				} else {
-				    destino = "";
-				}
-
-				
-				ps.println("\n"
-						+ Servidor.ANSI_PURPLE
-						+ "El cliente " 
-						+ Servidor.ANSI_GREEN 
-						+ this.nickName 
-						+ Servidor.ANSI_PURPLE
-						+ " envia: "
-						+ Servidor.ANSI_YELLOW
-						+ msgRecibido + "\n\t"
-						+ Servidor.ANSI_PURPLE
-						+ " al cliente =>"
-						+ Servidor.ANSI_CYAN
-						+ (destino.equalsIgnoreCase("") ? " Todos" : " ".concat(destino.toUpperCase()))
-						+ "\n"
-						+ Servidor.ANSI_RESET
-					);
-				
-				//filtro de comandos
-				//  mensaje= /salir
-							
-				//enviar mensaje
-				boolean clienteEncontrado = false;
-				for (ClienteCli cli : Servidor.ClientesConectados) {
-				    if (msgRecibido.equalsIgnoreCase("")) break;
-
-				    if (cli.getNickName().equalsIgnoreCase(destino) && this.isConected) {
-				        clienteEncontrado = true;
-				        try {
-				            cli.dosCliente.writeUTF(Servidor.ANSI_YELLOW
-				                    + this.nickName
-				                    + ": "
-				                    + Servidor.ANSI_RESET
-				                    + msgRecibido);
-				        } catch (IOException ex) {
-				            ps.println(Servidor.ANSI_RED + "<Cliente no disponible: " + destino.toUpperCase() + ">" + Servidor.ANSI_RESET);
-				        }
-				        break;
-				    } else if (destino.equalsIgnoreCase("")
-				            && this.isConected
-				            && !cli.getNickName().equalsIgnoreCase(this.nickName)) {
-				        try {
-				            cli.dosCliente.writeUTF(Servidor.ANSI_YELLOW
-				                    + this.nickName
-				                    + ": "
-				                    + Servidor.ANSI_RESET
-				                    + msgRecibido);
-				        } catch (IOException ex) {
-				            ps.println(Servidor.ANSI_RED + "<Cliente no disponible: " + cli.getNickName().toUpperCase() + ">" + Servidor.ANSI_RESET);
-				        }
-				    }
-				}
-
-				if (!clienteEncontrado && !destino.equalsIgnoreCase("")) {
-				    ps.println(Servidor.ANSI_RED + "<Cliente no encontrado: " + destino.toUpperCase() + ">" + Servidor.ANSI_RESET);
-				}
-
-			
-			} catch (IOException ex) {
-				Logger.getLogger(ClienteCli.class.getName()).log(Level.SEVERE,null,ex);
-			}
-		}
-	}
+    public void setBanned(boolean isBanned, long banDuration) {
+        this.isBanned = isBanned;
+        this.banEndTime = System.currentTimeMillis() + banDuration;
+    }
     
-	
-	
-	void notificarClientes(boolean estado) {
-		for( ClienteCli cli : Servidor.ClientesConectados )
-		{
-			if( !cli.getNickName().equals(this.nickName) && cli.isConected() )
-			{
-				try {
-					if(estado)
-					{
-						cli.dosCliente.writeUTF(Servidor.ANSI_GREEN
-								+ "\t---"
-								+ this.getNickName()
-								+ " se ah CONECTADO---"
-								+ Servidor.ANSI_RESET
-						);						
-					}else {
-						cli.dosCliente.writeUTF(Servidor.ANSI_RED
-								+ "\t---"
-								+ this.getNickName()
-								+ " se ah DESCONECTADO---"
-								+ Servidor.ANSI_RESET
-						);
-					}
-				}catch(IOException ex) {
-					Logger.getLogger(ClienteCli.class.getName()).log(Level.SEVERE,null,ex);
-				}
-			}
-		}
-	}
-	
     public String getNickName() {
-		return nickName;
-	}
+        return nickName;
+    }
 
-	public Socket getSock() {
-		return sock;
-	}
+    public Socket getSock() {
+        return sock;
+    }
 
-	public Thread getHilo() {
-		return hilo;
-	}
+    public Thread getHilo() {
+        return hilo;
+    }
 
-	public boolean isConected() {
-		return isConected;
-	}	
-	
+    public boolean isConected() {
+        return isConected;
+    }
+
+    public DataOutputStream getDos() {
+        return dosCliente;
+    }
+	public long getBanEndTime() {
+	    return banEndTime;
+	}
 }
