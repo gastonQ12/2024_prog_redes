@@ -85,11 +85,11 @@ public class Servidor extends Thread {
 
                     if (textoConsola != null) {
                         if (textoConsola.startsWith("global:")) {
-                            // Mensaje global
+                            // mensaje global
                             String mensaje = textoConsola.substring(7).trim();
                             enviarMensajeGlobal(mensaje);
                         } else if (textoConsola.contains(":")) {
-                            // Mensaje privado
+                            // mensaje privado
                             String[] partes = textoConsola.split(":", 2);
                             String nickname = partes[0].trim();
                             String mensaje = partes[1].trim();
@@ -104,7 +104,7 @@ public class Servidor extends Thread {
             }
         });
         entradaConsola.start();
-        // Aceptar clientes
+        // aceptar clientes
         while (true) {
             try {
                 ps.println("Esperando conexión de un cliente...\n");
@@ -118,7 +118,7 @@ public class Servidor extends Thread {
                 ps.println(ANSI_CYAN + "Creando un cliente... esperando identificación..." + ANSI_RESET);
                 String nickName = dis.readUTF();
 
-                // Verificar si el nickname ya está en uso
+                // verificar si el nickname ya esta en uso
                 synchronized (ClientesConectados) {
                     if (ClientesConectados.containsKey(nickName)) {
                         dos.writeUTF(ANSI_RED + "El nickname '" + nickName + "' ya está en uso. Desconectando..." + ANSI_RESET);
@@ -143,7 +143,7 @@ public class Servidor extends Thread {
         }
     }
 
-    // Método para enviar un mensaje global
+    // Meodo para enviar un mensaje global
     private void enviarMensajeGlobal(String mensaje) {
         ps.println(ANSI_GREEN + "Enviando mensaje global: " + mensaje + ANSI_RESET);
         synchronized (ClientesConectados) {
@@ -157,7 +157,7 @@ public class Servidor extends Thread {
         }
     }
 
-    // Método para enviar un mensaje privado
+    // metodo para enviar un mensaje privado
     private void enviarMensajePrivado(String nickname, String mensaje) {
         synchronized (ClientesConectados) {
             ClienteCli cli = ClientesConectados.get(nickname);

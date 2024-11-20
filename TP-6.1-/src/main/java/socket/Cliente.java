@@ -71,7 +71,7 @@ public class Cliente {
                         break;
                     }
 
-                    // Enviar mensaje
+                    //enviar mensaje
                     dos.writeUTF(msg);
                 }
             } catch (IOException e) {
@@ -94,7 +94,7 @@ public class Cliente {
                         break;
                     }
 
-                    // Detectar mensajes privados
+                    //  detectar mensajes privados
                     if (msg.startsWith("[MP]")) {
                         ps.println("\n" + Servidor.ANSI_PURPLE + msg + Servidor.ANSI_RESET);
                     } else {

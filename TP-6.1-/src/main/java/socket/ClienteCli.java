@@ -43,15 +43,15 @@ public class ClienteCli implements Runnable {
                 // Leer mensaje recibido
                 msgRecibido = this.disCliente.readUTF().trim();
 
-                // Validar palabras prohibidas
+                // validar palabras prohibidas
                 if (contienePalabraProhibida(msgRecibido)) {
                     this.dosCliente.writeUTF(Servidor.ANSI_RED 
                             + "[ERROR] Tu mensaje contiene palabras no permitidas y fue cancelado." 
                             + Servidor.ANSI_RESET);
-                    continue; // No procesar más este mensaje
+                    continue;
                 }
 
-                // Identificar el destino y contenido del mensaje
+                // identificar el destino y contenido del mensaje
                 if (msgRecibido.contains("#")) {
                     StringTokenizer token = new StringTokenizer(msgRecibido, "#");
                     destino = token.nextToken().trim().toLowerCase();
@@ -77,7 +77,7 @@ public class ClienteCli implements Runnable {
                         + Servidor.ANSI_RESET
                 );
 
-                // Enviar mensaje al destino (misma lógica actual)
+                // enviar mensaje al destino (misma lógica actual)
                 enviarMensaje(destino, msgRecibido);
 
             } catch (IOException ex) {
@@ -86,7 +86,7 @@ public class ClienteCli implements Runnable {
         }
     }
 
-    // Método para verificar si un mensaje contiene palabras prohibidas
+    // método para verificar si un mensaje contiene palabras prohibidas
     private boolean contienePalabraProhibida(String mensaje) {
         String mensajeLower = mensaje.toLowerCase(); // Convertir a minúsculas
         for (String palabra : Servidor.PALABRAS_PROHIBIDAS) {
@@ -97,13 +97,13 @@ public class ClienteCli implements Runnable {
         return false;
     }
 
-    // Método para enviar el mensaje (lógica existente, optimizada)
+    // método para enviar el mensaje (lógica existente, optimizada)
     private void enviarMensaje(String destino, String mensaje) {
         boolean clienteEncontrado = false;
         for (ClienteCli cli : Servidor.ClientesConectados.values()) {
             if (mensaje.equalsIgnoreCase("")) break;
 
-            // Mensaje Privado (MP)
+            // mensaje Privado
             if (cli.getNickName().equalsIgnoreCase(destino) && this.isConected) {
                 clienteEncontrado = true;
                 try {
@@ -115,7 +115,7 @@ public class ClienteCli implements Runnable {
                 break;
             }
 
-            // Mensaje Global
+            // mensaje Global
             if (destino.equalsIgnoreCase("") && this.isConected && !cli.getNickName().equalsIgnoreCase(this.nickName)) {
                 try {
                     cli.dosCliente.writeUTF(this.nickName + ": " + mensaje);
@@ -125,7 +125,7 @@ public class ClienteCli implements Runnable {
             }
         }
 
-        // Notificar si el destinatario no fue encontrado
+        // notificar si el destinatario no fue encontrado
         if (!clienteEncontrado && !destino.equalsIgnoreCase("")) {
             try {
                 this.dosCliente.writeUTF("[ERROR] El cliente " + destino.toUpperCase() + " no está conectado o no existe.");
